@@ -1,0 +1,8 @@
+Plan of attack:
+
+1. Show each label in image form to get a general idea of how each digit looks like
+2. Try to engineer a new feature which would describe pixel average values for each digit/Any other unique feature which would contribute 
+   for image classification
+3. Apply PCA/LDA (Like a convolution) which would reduce the number of dimensions in the euclidean space and the learning algorithm's 
+   complexity
+4. Apply a linear algorithm to try and classify each label.   
