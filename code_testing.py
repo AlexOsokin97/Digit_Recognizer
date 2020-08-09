@@ -7,44 +7,49 @@ Created on Fri Aug  7 21:41:40 2020
 
 import pandas as pd
 import numpy as np
-from PIL import Image
-
 data = pd.read_csv('train.csv')
 
+
 zeros = data.loc[data['label'] == 0].copy()
-zeros.drop(['label'], axis=1, inplace=True)
-zeros.reset_index(drop=True, inplace=True)
+zeros.drop(['label'],axis=1, inplace=True)
+
+zeros = zeros/255.0
+
+zeros_img_mode = zeros.values.reshape(-1, 28, 28, 1)
+
+np.average(zeros_img_mode[0][:,:,0])
 
 ones = data.loc[data['label'] == 1].copy()
-ones.drop(['label'], axis=1, inplace=True)
-ones.reset_index(drop=True, inplace=True)
+ones.drop(['label'],axis=1, inplace=True)
 
-cols = ones.columns.tolist()
+ones = ones/255.0
 
-one1 = ones.iloc[[1], :].copy()
+ones_img_mode = ones.values.reshape(-1, 28, 28, 1)
 
-one1_pixls = []
-i = 0
-col_list = one1.columns.tolist()
+np.average(ones_img_mode[0][:,:,0])
 
-while i < 28:
-    row = []
-    counter = 0
-    for column in col_list:
-        val = one1[column].values[0]
-        row.append(val)
-        counter += 1
-        col_list.remove(column)
-        if counter == 27:
-            break
-    one1_pixls.append(row)
-    i += 1
+img = data.loc[data['label'] == 1].iloc[:, 1:].values.reshape(-1, 28, 28, 1)
 
-one1_pixls = np.array(one1_pixls, dtype=np.uint8)
-image = Image.fromarray(one1_pixls)
-image.save('new.png')
+def average_pixel_value(data, digits=[]):
+    
+    avg_pixel = {}
+    
+    for dig in digits:
+        
+        img = data.loc[data['label'] == digits[dig]].iloc[:, 1:].values.reshape(-1, 28, 28, 1)
+        #img = dig_loc.iloc[:, 1:].values.reshape(-1, 28, 28, 1)
+        avg = np.average(img[0][:,:,0])
+        avg_pixel[dig] = avg
+    
+    return avg_pixel
 
+arr = [x for x in range(0,10,1)]
 
+dic = average_pixel_value(data, [x for x in range(0,10,1)])
+
+dic = pd.Series(dic).to_frame('Average_pixel')
+
+dic = dic/255.0
 
 
 
