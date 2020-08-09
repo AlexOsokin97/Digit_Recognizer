@@ -9,51 +9,60 @@ import pandas as pd
 import numpy as np
 data = pd.read_csv('train.csv')
 
+#############################################################################
 
-zeros = data.loc[data['label'] == 0].copy()
-zeros.drop(['label'],axis=1, inplace=True)
-
-zeros = zeros/255.0
-
-zeros_img_mode = zeros.values.reshape(-1, 28, 28, 1)
-
-np.average(zeros_img_mode[0][:,:,0])
-
-ones = data.loc[data['label'] == 1].copy()
-ones.drop(['label'],axis=1, inplace=True)
-
-ones = ones/255.0
-
-ones_img_mode = ones.values.reshape(-1, 28, 28, 1)
-
-np.average(ones_img_mode[0][:,:,0])
-
-img = data.loc[data['label'] == 1].iloc[:, 1:].values.reshape(-1, 28, 28, 1)
-
-def average_pixel_value(data, digits=[]):
+def avg_pixel_used(data, digits=[]):
     
-    avg_pixel = {}
+    pixel_used = {}
     
     for dig in digits:
         
-        img = data.loc[data['label'] == digits[dig]].iloc[:, 1:].values.reshape(-1, 28, 28, 1)
-        #img = dig_loc.iloc[:, 1:].values.reshape(-1, 28, 28, 1)
-        avg = np.average(img[0][:,:,0])
-        avg_pixel[dig] = avg
+        val = data.loc[data['label']==digits[dig]].iloc[[0], 1:]
+        counter = 0
+        
+        for col in val.columns:
+            
+            if val[col].unique() > 0:
+                
+                counter += 1
+                
+            else: 
+                continue
+        
+        pixel_used[dig] = counter/784
+
+    return pixel_used
+
+##############################################################################
+
+test = avg_pixel_used(data, [x for x in range(10)])
+
+data_copy = data.copy()
+
+data_copy['avg_pixel_used'] = np.nan
+
+##############################################################################
+
+def fill_avgPixelUsed(data, digits=[]):
     
-    return avg_pixel
+    for dig in digits:
+        
+        data.loc[data['label'] == dig, 'avg_pixel_used'] = test[dig]
 
-arr = [x for x in range(0,10,1)]
+##############################################################################
 
-dic = average_pixel_value(data, [x for x in range(0,10,1)])
+fill_avgPixelUsed(data_copy, [x for x in range(10)])
 
-dic = pd.Series(dic).to_frame('Average_pixel')
+data_copy['avg_pixel_used'].value_counts()
 
-dic = dic/255.0
+data_copy['avg_pixel_val'] = np.nan
 
+#############################################################################
 
+def fill_avgPixelVal(data, digits=[]):
+    
+    for dig in digits:
+        
+        data.loc[data['label'] == dig, 'avg_pixel_val'] = test[dig]
 
-
-
-
-
+##############################################################################
