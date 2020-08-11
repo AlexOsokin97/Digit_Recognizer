@@ -36,6 +36,9 @@ def avg_pixel_used(data, digits=[]):
 ##############################################################################
 
 test = avg_pixel_used(data, [x for x in range(10)])
+test = pd.Series(test).to_frame('average_pixels_used')
+
+test.iloc[[0]].values
 
 data_copy = data.copy()
 
@@ -47,11 +50,13 @@ def fill_avgPixelUsed(data, digits=[]):
     
     for dig in digits:
         
-        data.loc[data['label'] == dig, 'avg_pixel_used'] = test[dig]
+        data.loc[data['label'] == dig, 'avg_pixel_used'] = test.iloc[[dig]].values
 
 ##############################################################################
 
 fill_avgPixelUsed(data_copy, [x for x in range(10)])
+
+data_copy.iloc[:, [-1]]
 
 data_copy['avg_pixel_used'].value_counts()
 
