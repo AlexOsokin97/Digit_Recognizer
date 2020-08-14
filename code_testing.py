@@ -8,66 +8,62 @@ Created on Fri Aug  7 21:41:40 2020
 import pandas as pd
 import numpy as np
 data = pd.read_csv('train.csv')
+data.drop(['label'], axis=1, inplace=True)
 
-#############################################################################
+data['avg_pixel_used'] = np.nan
 
-def avg_pixel_used(data, digits=[]):
+for i in range(len(data)):
     
-    pixel_used = {}
+    val = data.iloc[[i], :-1]
+    counter = 0
+        
+    for col in val.columns:
     
-    for dig in digits:
-        
-        val = data.loc[data['label']==digits[dig]].iloc[[0], 1:]
-        counter = 0
-        
-        for col in val.columns:
-            
-            if val[col].unique() > 0:
+        if val[col].unique() > 0:
                 
-                counter += 1
+            counter += 1
                 
-            else: 
-                continue
+        else: 
+            continue
         
-        pixel_used[dig] = counter/784
+    data.loc[[i], 'avg_pixel_used'] = counter/784
+   
+###############################################################################################
 
-    return pixel_used
+data['max_pixel_val'] = np.nan
 
-##############################################################################
+img = data.iloc[:, :-2].values.reshape(-1, 28, 28, 1)/255.0
 
-test = avg_pixel_used(data, [x for x in range(10)])
-test = pd.Series(test).to_frame('average_pixels_used')
+test = img[0][:14,:14,0]
+test2 = img[0][14:,:14,0]
 
-test.iloc[[0]].values
-
-data_copy = data.copy()
-
-data_copy['avg_pixel_used'] = np.nan
-
-##############################################################################
-
-def fill_avgPixelUsed(data, digits=[]):
+for i in range(len(img)):
     
-    for dig in digits:
-        
-        data.loc[data['label'] == dig, 'avg_pixel_used'] = test.iloc[[dig]].values
-
-##############################################################################
-
-fill_avgPixelUsed(data_copy, [x for x in range(10)])
-
-data_copy.iloc[:, [-1]]
-
-data_copy['avg_pixel_used'].value_counts()
-
-data_copy['avg_pixel_val'] = np.nan
-
-#############################################################################
-
-def fill_avgPixelVal(data, digits=[]):
+    sub_img1 = np.average(img[i][:14,:14,0])
+    sub_img2 = np.average(img[i][14:,:14,0])
+    sub_img3 = np.average(img[i][:14,14:,0])
+    sub_img4 = np.average(img[i][14:,14:,0])
     
-    for dig in digits:
-        
-        data.loc[data['label'] == dig, 'avg_pixel_val'] = test[dig]
+    maximum = np.max([sub_img1,sub_img2,sub_img3,sub_img4])
+    
+    data.loc[[i], 'max_pixel_val'] = maximum
+    
+################################################################################################
+    
+data['avg_pixel_val'] = np.nan
 
-##############################################################################
+for i in range(len(data)):
+    
+    pixels = []
+    
+    for col in data.iloc[[i], :-3].columns:
+        
+        pixels.append(col.values)
+    
+    data.loc[[i], 'avg_pixel_val'] = np.average(pixels)
+                         
+                         
+                         
+                         
+                         
+                         
