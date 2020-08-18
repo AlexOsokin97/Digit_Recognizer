@@ -7,7 +7,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler, test
 import sys
 
 app = Flask(__name__)
-@app.route('/guess', methods=['POST'])
+
 
 
 class CORSRequestHandler (SimpleHTTPRequestHandler):
@@ -23,9 +23,10 @@ def load_models():
         model = data['model']
     return model
 
+@app.route('/guess', methods=['POST'])
 def guess():
     #stub input features
-    data = request.form.get('image')
+    imagefile = flask.request.files.get('imagefile', '')
     #x = request_json['input']
     #x_in = np.array(x).reshape(1, -1)
     #load model & make a guess
