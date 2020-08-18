@@ -1,41 +1,46 @@
-import flask
-from flask import Flask, jsonify, jsonify, request
-import json
-import numpy as np
-import pickle
-from http.server import HTTPServer, SimpleHTTPRequestHandler, test
-import sys
+import os,io
+from flask import Flask, request, redirect, url_for,Response,render_template,send_file,make_response,jsonify,send_from_directory
+from flask_cors import CORS,cross_origin
 
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static\\upload')
+VIDEO_FOLDER = os.path.join(APP_ROOT,'static\\video')
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 
-class CORSRequestHandler (SimpleHTTPRequestHandler):
-    def end_headers (self):
-        self.send_header('Access-Control-Allow-Origin', '*')
-        SimpleHTTPRequestHandler.end_headers(self)
-    
-    
-def load_models():
-    file_name = 'model_path'
-    with open(file_name, 'rb') as pickled:
-        data = pickle.load(pickled)
-        model = data['model']
-    return model
 
-@app.route('/guess', methods=['POST'])
-def guess():
-    #stub input features
-    imagefile = flask.request.files.get('imagefile', '')
-    #x = request_json['input']
-    #x_in = np.array(x).reshape(1, -1)
-    #load model & make a guess
-    model = load_models()
-    #guessing = model.predict(x_in)[0]
-    #send a response
-    #response = json.dumps({'response': guessing})
-    #return response, 200
+cors = CORS(app, allow_headers='Content-Type', CORS_SEND_WILDCARD=True)
+
+
+def allowed_file(filename):
+    """
+    :param filename: 
+    :return: 
+    """
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/upload', methods=['GET','POST'])
+@cross_origin(origins='*', send_wildcard=True)
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            byte_io = io.BytesIO()
+            byte_io.write(file.read())
+            byte_io.seek(0)
+            response = make_response(send_file(byte_io,mimetype='image/jpg'))
+            response.headers['Content-Transfer-Encoding']='base64'
+            return response 
+
+    return render_template('upload.html')
+
+
+
 
 if __name__ == '__main__':
-    test(CORSRequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 8000)
     app.run(debug=True)
