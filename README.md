@@ -21,7 +21,7 @@
 
 ***The label column is present only in the training set and contains the digit that was drawn by the user.***
 
-## Step 1: Data Cleaning and Analysis:
+## Step 1 - Data Cleaning and Analysis:
 ***In this step I loaded both train and test sets and explored them a bit.***
 
 ***Firstly, I wanted to check if there were missing values which might be a result of a corrupted image. In that case that sample should be removed. Luckliy, there were no missing values which means all images were normal.***
@@ -34,15 +34,17 @@
 
 [plot1]: https://github.com/AlexOsokin97/Digit_Recognizer/blob/master/Categorical%20Count%20Plot.png "CountPlot"
 
-## Step 2: Image Representation:
+## Step 2 - Image Representation:
 ***Because my plan was to use feature engineering and dimension reduction techniques I took 9 random images for each digit label, transformed them to grayscale and returned them to their original form as 28x28 pixels. Looking at the images gave me ideas for new feature creations and a general intuition on the variance of each digit (because all the digits were drawn by users and each user has his own drawing style).***
 
 ![alt_text][plot2]
 
 [plot2]: https://github.com/AlexOsokin97/Digit_Recognizer/blob/master/Digit_Grids/6_grid.jpeg "digit6grid"
 
-## Step 3: Feature Engineering:
-***I created 3 new features by using all the pixel columns and their values***
+## Step 3 - Feature Engineering:
+
+### Creating new features:
+**I created 3 new features by using all the pixel columns and their values**
 
 ***Feature 1: Average Pixel Used*** - **I constructed this feature by writing a function with time complexity of O(n^2) which iterates through each sample (row), counts the number of pixels (columns) where the pixel's value is bigger than 0, divides the counter by 784 (total number of pixels) and stores the result at the new column with respect to the sample number.**
 
@@ -52,5 +54,18 @@
 
 *method explaination:* *The reason this function has time complexity of O(n) is because it iterates through every sample in the data set. As a result, the more samples there are the longer it would take to complete (linear relationship). The reason I chose to split each image to 4 sub images, calculate the average pixel value for each sub image and take the maximum average of the 4 images was to resemble the convolution and max pooling methods used in a neural network (Each line of code which does those tasks has time complexity of O(1)).*
 
-***Feature 3: Average Pixel Value*** - 
+***Feature 3: Average Pixel Value*** - **I constructed this feature by creating a function with time complexity of O(n) which reshapes all the samples into 28x28 grayscale image then, it iterates through every image, takes the average pixel value of the image and stores it in the new column.**
+
+*method explaination:* *The reason this function has time complexity of O(n) is because it iterates through every sample in the data set. I decided to create this feature because even though it is very basic it might be a valuable feature when it comes to classification decision.*
+
+### Feature Scaling & Applying PCA:
+**After I done creating the new features I ended up with even 787/788 features (788 dimensional data). While there are few machine learning algorithm which can run on large dimensional data sets I decided to use Principal Component Analysis (PCA) to reduce the dimensionality of the data.**
+
+***Feature Scaling:*** **In order to apply PCA on the data set I must scale the features. The newely created features were scaled between 0 < n < 1 during creation so there is no need to apply scaling on them. The pixel columns though, had values between 0 - 255 so, I scaled the pixel columns by dividing each value by 255.0. This not only scaled the data between 0 - 1 but also transformed the images into grayscale.***
+
+***PCA:*** **Applied PCA on all the 784 pixels with 45 components. The 45 components together can explain 81% of the variance which means that most of the data stored in the pixels was preserved. Lastly, I removed all the pixel columns and replaced them with all the pca components.**
+
+***To sum up, I managed to reduce the dimensionality of the data from 784 dimensions to 48 dimensions which gave me the opportunity to use more machine learning algorithms efficiently.***
+
+## Step 4 - Machine Learning:
 
