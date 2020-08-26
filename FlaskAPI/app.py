@@ -1,22 +1,29 @@
 import flask
 import pandas as pd
 import pickle
-from flask_cors import CORS
+import base64
+from flask_cors import CORS, cross_origin
+from flask import Flask, request, jsonify
 from transformation import data_transformation
 
-data = pd.read_csv('../test.csv')
-features = data_transformation(data)
-
 app = flask.Flask(__name__)
+app.config['SECRET_KEY'] = 'number'
+app.config['CORS_HEADERS'] = 'Guess-Type'
 app.config["DEBUG"] = True
-CORS(app)
 
+cors = CORS(app, resources={r"/guess": {"origins": "http://localhost:5000"}})
 
-@app.route('/guess', methods=['POST', 'GET'])
+@app.route('/guess', methods=['POST'])
+@cross_origin(origin='localhost',headers=['Guess-Type','number'])
 def guess():
-    loaded_model = pickle.load(open('../Models/SVM_98%_Kaggle.sav', 'rb'))
-    pred = loaded_model.predict(features)
+   return '1' 
+    #data = 
+    #features = data_transformation(data)
+    
+    #loaded_model = pickle.load(open('../Models/SVM_98%_Kaggle.sav', 'rb'))
+    #pred = loaded_model.predict(features)
 
-    return pred
+    #return pred
 
-app.run()
+if __name__ == '__main__':
+   app.run()

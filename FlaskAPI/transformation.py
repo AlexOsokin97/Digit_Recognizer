@@ -1,11 +1,9 @@
 import numpy as np
 import pandas as pd
-from sklearn.decomposition import PCA
-
-data = pd.read_csv('../test.csv')
+import pickle
 
 def data_transformation(data):
-
+        
         x_features = data.iloc[[0], :].copy()
 
         ############################################################################################
@@ -48,10 +46,8 @@ def data_transformation(data):
 
         #########################################################################################
         
-        value = x_features.copy()
-        
-        pca = PCA(n_components=0.81)
-        components = pca.fit_transform(value[[0], :-3])
+        pca = pickle.load(open("../Models/pca.pkl",'rb'))
+        components = pca.transform(x_features[[0], :-3])
 
         x_features = pd.DataFrame(x_features)
 
@@ -60,8 +56,9 @@ def data_transformation(data):
 
         #########################################################################################
 
-        x_features.drop(x_features.columns[:784], axis=1, inplace=True).values
-
+        x_features.drop(x_features.columns[:784], axis=1, inplace=True)
+        x_features = x_features.values
+    
         #######################################################################################
 
         return x_features
