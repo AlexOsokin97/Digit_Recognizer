@@ -1,7 +1,7 @@
 # Digit Recognizer With Machine Learning:
 *Made by:* **Alexander Osokin**  
 *Date:* **20.08.2020**  
-*Kaggle Test Score:* **98% Accuracy**
+*Kaggle Test Score:* **98.3% Accuracy**
 
 ## Objective:
 **Is it possible to classify digit images using machine learning?**
@@ -14,7 +14,9 @@
 ***When I joined the competition I got access to 3 .csv files: train.csv, test.csv, sample_submission.csv.***
 
 *train.csv:* contains 48,000 rows (samples) and 785 columns (1 [label] 784 [pixel0 - pixel783])
+
 *test.csv:* contains 28,000 rows (samples) and 784 columns (784 [pixel0 - pixel783])
+
 *sample_submission.csv:* shows how the submission file should look like (1 [ImageId] & 1 [Label])
 
 ***Each image in the datasets was 28 pixels in height and 28 pixels in width, for a total of 784 pixels in each image. The images were reshaped into a 1D vector, resulting in 784-pixel columns. Each pixel contains an integer between 0-255 which indicates the lightness or darkness of the pixel, where higher numbers mean darker pixel.***
@@ -56,19 +58,19 @@
 
 ***Feature 3: Average Pixel Value*** - **I constructed this feature by creating a function with time complexity of O(n) which reshapes all the samples into 28x28 grayscale image then, it iterates through every image, takes the average pixel value of the image and stores it in the new column.**
 
-*method explanation:* *The reason this function has time complexity of O(n) is because it iterates through every sample in the data set. I decided to create this feature because even though it is very basic it might be a valuable feature when it comes to classification decision.*
+*method explanation:* *The reason this function has time complexity of O(n) is because it iterates through every sample in the data set. I decided to create this feature because even though it is very basic it might be a valuable feature when it comes to classification decision because each digit from the same type will use roughly the same amount of pixels no matter how you draw it (as long as their images are on the same scale).*
 
 ### Feature Scaling & Applying PCA:
-**After I done creating the new features, I ended up with even 787/788 features (788-dimensional data). While there are few machine learning algorithm which can run on large dimensional data sets I decided to use Principal Component Analysis (PCA) to reduce the dimensionality of the data.**
+**After I done creating the new features, I ended up with 787/788 features (788-dimensional data). While there are few machine learning algorithm which can run on large dimensional data sets I decided to use Principal Component Analysis (PCA) to reduce the dimensionality of the data.**
 
-***Feature Scaling:*** **In order to apply PCA on the data set I must scale the features. The newly created features were scaled between 0 < n < 1 during creation so there is no need to apply scaling on them. The pixel columns though, had values between 0 - 255 so, I scaled the pixel columns by dividing each value by 255.0. This not only scaled the data between 0 - 1 but also transformed the images into grayscale.***
+***Feature Scaling:*** **In order to apply PCA on the data set I must scale the features. The newly created features were scaled between 0 < n < 1 during creation so there is no need to apply scaling on them. The pixel columns though, had values between 0 - 255 so, I scaled the pixel columns by dividing each value by 255.0. This not only scaled the data between 0 - 1 but also transformed the images into grayscale.**
 
-***PCA:*** **Applied PCA on all the 784 pixels with 45 components. The 45 components together can explain 81% of the variance which means that most of the data stored in the pixels was preserved. Lastly, I removed all the pixel columns and replaced them with all the pca components.**
+***PCA:*** **Applied PCA on all the 784 pixels with 45 components. The 45 components together can explain 81% of the variance which means that most of the data stored in the pixels was preserved. I chose explaination of variance above 80% because all of the images mostly store 0 values and do not have a great impact on the model training. Lastly, I removed all the pixel columns and replaced them with all the pca components.**
 
-***To sum up, I managed to reduce the dimensionality of the data from 784 dimensions to 48 dimensions which gave me the opportunity to use more machine learning algorithms efficiently.***
+***To sum up, I managed to reduce the dimensionality of the data from 784 dimensions to 48 dimensions which would reduce the training time of the algorithms greatly. As a result, it gave me the opportunity to use more complex machine learning algorithms by modifying their hyper parameters.***
 
 ## Step 4 - Machine Learning:
-***Now that I had cleaned my data, got a general intuition on how it looks, engineered new features and reduced dimensionality I was ready to apply Machine Learning algorithm***
+***Now that I had cleaned my data, got a general intuition on how it looks, engineered new features and reduced dimensionality I was ready to apply Machine Learning Algorithms***
 
 ### Functions:
 ***In order to save time and make the code as clean and short as possible I created 3 functions that would be used by every machine learning algorithm I decided to use***
@@ -80,3 +82,13 @@
 **Function 3: model_performance** - *This function takes an already trained machine learning model, a list of scoring metrics and returns a dictionary with scores according to every scoring metric. This function is useful because it allows you to see your model's performance from different metrics and make changes/fixes accordingly.*
 
 ### Machine Learning Algorithms:
+***Now that my Machine Learning enviornment had been set up I was ready to deploy the algorithms. I used 2 algorithms that were in my opinion were the best fit for this problem.***
+
+#### Support Vector Machines:
+***The Support Vector Machines algorithm takes the given data points and applies them on a higher dimension that makes it possible to seperate them linearly, this is a achieved with the help of kernels. In addition, it uses a regularization parameter (C) that is responsible on the penalization of the algorithm when it misclassifys a sample, which directly affects the complexity of the hyper-plane. Lastly, the hyper-plane is a straight/curved line which is the result of the margin between the closest data points from each class (also called support vectors) which maximize the separabilty space between each class.***
+
+**Why** - *I used this algorithm because according to the machine learning theory, the right data modification and transformation makes it possible to make a linear separation between clusters of data points and that is what the support vector machines does and for this reason, I used dimension reduction techniques and feature engineering. In addition, it is simple to implement and tune to get the best results.*
+ 
+**Implementation** - 
+
+#### K Nearest Neighbors:
