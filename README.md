@@ -84,11 +84,27 @@
 ### Machine Learning Algorithms:
 ***Now that my Machine Learning enviornment had been set up I was ready to deploy the algorithms. I used 2 algorithms that were in my opinion were the best fit for this problem.***
 
-#### Support Vector Machines:
+### Support Vector Machines:
 ***The Support Vector Machines algorithm takes the given data points and applies them on a higher dimension that makes it possible to seperate them linearly, this is a achieved with the help of kernels. In addition, it uses a regularization parameter (C) that is responsible on the penalization of the algorithm when it misclassifys a sample, which directly affects the complexity of the hyper-plane. Lastly, the hyper-plane is a straight/curved line which is the result of the margin between the closest data points from each class (also called support vectors) which maximize the separabilty space between each class.***
 
 **Why** - *I used this algorithm because according to the machine learning theory, the right data modification and transformation makes it possible to make a linear separation between clusters of data points and that is what the support vector machines does and for this reason, I used dimension reduction techniques and feature engineering. In addition, it is simple to implement and tune to get the best results.*
  
-**Implementation** - 
+**Implementation** - *The first svm model that I tested was the simplest because, my goal when I featured engineered and used dimension reduction was that even a simple model implementation would achieve a high performance & after all, the simpler the better. The kernel was set to linear with regularization C of 3.5 with the use of cross validation function with k-folds = 10. The result: mean accuracy of 93%. One could argue that 93% is a good accuracy but, imagine we would need to classify 100,000 images with this model, we would misclassify 7,000 images and that is quite alot! As a result, I needed to modify my model in a way that would achieve a much better accuracy. For this task I used the hyper-parameter tunning function and created a hyper-parameter dictionary which consisted of hyper-parameters' names and list of values as their value. I used 3 hyper-parameters: kernel, C and tol. These 3 hyper parameters allowed me to directly control the complexity of the model's fit. When the training and fitting was complete I got the best accuracy of 98.14% with the following hyper-parameters: kernel='rbf', C=3.5, tol=0.1. The reason for those values might be that the data was still not linearly separable enough and as a result it had to use a more complex kernel method. Because our data set is very large and each feature does a good job of generalizing it's label high penalization of the model was not necessary and as a result the model managed to generalize better and making a better fit, same goes with tol=0.1. Now that I got the best model I needed to test it on the testing set.*
+
+#### Test Scores:
+
+***Confusion Matrix***<br/>
+0: [417   0   2   0   0   0   1   0   0   0]<br/>
+1: [  0 488   0   0   0   0   0   0   0   0]<br/>
+2: [  0   0 412   2   2   0   0   3   2   0]<br/>
+3: [  0   0   3 411   0   4   0   2   2   1]<br/>
+4: [  0   1   2   0 412   0   0   4   0   7]<br/>
+5: [  1   1   0   6   0 381   1   0   0   1]<br/>
+6: [  1   0   1   0   2   0 399   0   0   0]<br/>
+7: [  0   0   3   0   0   0   0 397   0   3]<br/>
+8: [  0   3   0   2   2   1   0   0 401   2]<br/>
+9: [  1   0   0   0   4   3   0   2   0 404]
+
+***Accuracy Score:*** **98.14%**
 
 #### K Nearest Neighbors:
