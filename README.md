@@ -107,11 +107,11 @@
 
 ***Accuracy Score:*** **98.14%**
 
-#### K Nearest Neighbors:
+### K Nearest Neighbors:
 ***The K Nearest Neighbors is a very simple and easy to implement algorithm which takes a given label data, clusters it according to the types of labels present in the data set and when it gets a new data point it predicts it's label by calculating the distance between the new point and each closest point from each class. When the calculation is done it classifies the new data point with the point's class with which it had the shortest distance.***
 
 **Why** - 
 
 **Implementation** -
 
-### Test Scores:
+#### Test Scores:
