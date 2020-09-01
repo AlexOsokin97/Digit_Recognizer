@@ -5,6 +5,7 @@ import base64
 from flask_cors import CORS, cross_origin
 from flask import Flask, request, jsonify
 from transformation import data_transformation
+from transform_to_image import getImage
 
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = 'number'
@@ -16,7 +17,9 @@ cors = CORS(app, resources={r"/guess": {"origins": "http://localhost:5000"}})
 @app.route('/guess', methods=['POST'])
 @cross_origin(origin='localhost',headers=['Guess-Type','number'])
 def guess():
-   return '1' 
+    data = request.data
+    image = getImage(data)
+    return image
     #data = 
     #features = data_transformation(data)
     
@@ -24,6 +27,8 @@ def guess():
     #pred = loaded_model.predict(features)
 
     #return pred
+
+
 
 if __name__ == '__main__':
    app.run()
