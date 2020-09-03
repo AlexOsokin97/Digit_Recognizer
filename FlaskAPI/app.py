@@ -19,16 +19,10 @@ cors = CORS(app, resources={r"/guess": {"origins": "http://localhost:5000"}})
 def guess():
     data = request.data
     image = getImage(data)
-    return image
-    #data = 
+    print(image.shape)
     #features = data_transformation(data)
     
     #loaded_model = pickle.load(open('../Models/SVM_98%_Kaggle.sav', 'rb'))
     #pred = loaded_model.predict(features)
 
     #return pred
-
-
-
-if __name__ == '__main__':
-   app.run()

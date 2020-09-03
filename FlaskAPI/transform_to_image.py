@@ -15,12 +15,12 @@ from io import BytesIO
 def getImage(data):
     
     data_url = data
-    dimensions = (28,28)
+    width, height = 28, 28
     
-    image_64 = data_url.split(",")[1]
+    image_64 = data_url[22:]
     binary = base64.b64decode(image_64)
     image = np.asarray(bytearray(binary), dtype="uint8")
-    image = cv2.imcode(image, cv2.IMREAD_COLOR)
+    #img = Image.fromarray(data, 'RGB')
     
     return image
     
