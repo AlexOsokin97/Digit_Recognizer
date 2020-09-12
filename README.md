@@ -70,7 +70,7 @@
 ***To sum up, I managed to reduce the dimensionality of the data from 784 dimensions to 48 dimensions which would reduce the training time of the algorithms greatly. As a result, it gave me the opportunity to use more complex machine learning algorithms by modifying their hyper parameters.***
 
 ## Step 4 - Machine Learning:
-***Now that I had cleaned my data, got a general intuition on how it looks, engineered new features and reduced dimensionality I was ready to apply Machine Learning Algorithms***
+***Now that I had cleaned my data, got a general intuition on how it looks, engineered new features and reduced dimensionality I was ready to apply a Machine Learning Algorithm***
 
 ### Functions:
 ***In order to save time and make the code as clean and short as possible I created 3 functions that would be used by every machine learning algorithm I decided to use***
@@ -82,7 +82,7 @@
 **Function 3: model_performance** - *This function takes an already trained machine learning model, a list of scoring metrics and returns a dictionary with scores according to every scoring metric. This function is useful because it allows you to see your model's performance from different metrics and make changes/fixes accordingly.*
 
 ### Machine Learning Algorithms:
-***Now that my Machine Learning enviornment had been set up I was ready to deploy the algorithms. I used 2 algorithms that were in my opinion were the best fit for this problem.***
+***Now that my Machine Learning enviornment had been set up I was ready to deploy the algorithm. I used the support vector machines algorithm.***
 
 ### Support Vector Machines:
 ***The Support Vector Machines algorithm takes the given data points and applies them on a higher dimension that makes it possible to seperate them linearly, this is achieved with the help of kernels. In addition, it uses a regularization parameter (C) that is responsible on the penalization of the algorithm when it misclassifys a sample, which directly affects the complexity of the hyper-plane. Lastly, the hyper-plane is a straight/curved line which is the result of the margin between the closest data points from each class (also called support vectors) which maximize the separabilty space between each class.***
@@ -106,12 +106,3 @@
 9: [  1   0   0   0   4   3   0   2   0 404]
 
 ***Accuracy Score:*** **98.14%**
-
-### K Nearest Neighbors:
-***The K Nearest Neighbors is a very simple and easy to implement algorithm which takes a given label data, clusters it according to the types of labels present in the data set and when it gets a new data point it predicts it's label by calculating the distance between the new point and each closest point from each class. When the calculation is done it classifies the new data point with the point's class with which it had the shortest distance.***
-
-**Why** - 
-
-**Implementation** -
-
-#### Test Scores:
